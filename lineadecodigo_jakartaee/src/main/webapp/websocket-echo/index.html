@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <h1>Websocket Echo</h1>
+
+    <script type="text/javascript">
+
+
+        function escribir(texto){
+            valor = document.getElementById("caja").value;
+            document.getElementById("caja").value = valor + texto + "\n";
+        }	
+    
+        var mysocket = new WebSocket("ws://localhost:8080/lineadecodigo_jakartaee/echo");
+    
+        mysocket.onopen = function (evt){
+             escribir("Websocket abierto");
+             
+        };
+    
+        mysocket.onmessage = function (evt){
+            escribir("RECIBIDO: " + evt.data);
+            
+        };
+    
+        mysocket.onclose = function (evt){
+             escribir("Websocket cerrado");
+        };
+    
+        mysocket.onerror = function (evt) {
+            escribir("ERROR: " + evt.data);
+        }
+    
+        function enviar(texto) {
+            mysocket.send(texto);
+            escribir("ENVIADO: " + texto);
+        }
+    
+        function desconectar(){		
+            mysocket.close();
+        }       
+    </script>
+    
+    <textarea id="caja" cols="100" rows="20"></textarea><br/>
+    <input id="mensaje" type="text" size="105"></input>
+    <button onClick="enviar(document.getElementById('mensaje').value);">Enviar</button>
+    <button onClick="desconectar()">Desconectar</button>
+    
+</body>
+</html>
